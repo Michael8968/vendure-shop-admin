@@ -1,0 +1,46 @@
+<vdr-page-block>
+    <vdr-action-bar>
+        <vdr-ab-left>
+            <vdr-entity-info [entity]="entity$ | async"></vdr-entity-info>
+        </vdr-ab-left>
+        
+        <vdr-ab-right>
+            <vdr-action-bar-items locationId="video-detail"></vdr-action-bar-items>
+            <button
+                class="btn btn-primary"
+                *ngIf="isNew$ | async; else updateButton"
+                (click)="create()"
+                [disabled]="detailForm.invalid || detailForm.pristine"
+            >
+                {{ 'common.create' | translate }}
+            </button>
+            <ng-template #updateButton>
+                <button
+                    class="btn btn-primary"
+                    (click)="save()"
+                    [disabled]="detailForm.invalid || detailForm.pristine"
+                >
+                    {{ 'common.update' | translate }}
+                </button>
+            </ng-template>
+        </vdr-ab-right>
+    </vdr-action-bar>
+</vdr-page-block>
+
+<form class="form" [formGroup]="detailForm">
+    <vdr-form-field [label]="'Title' | translate" for="title">
+        <input id="title" type="text" formControlName="title" />
+    </vdr-form-field>
+    
+    <vdr-form-field [label]="'URL' | translate" for="url">
+        <input id="url" type="text" formControlName="url" />
+    </vdr-form-field>
+    
+    <vdr-form-field [label]="'Thumbnail URL' | translate" for="thumbnailUrl">
+        <input id="thumbnailUrl" type="text" formControlName="thumbnailUrl" />
+    </vdr-form-field>
+    
+    <vdr-form-field [label]="'Preview' | translate" for="preview">
+        <img *ngIf="detailForm.get('thumbnailUrl')?.value" [src]="detailForm.get('thumbnailUrl')?.value" alt="Video thumbnail" class="thumbnail-preview">
+    </vdr-form-field>
+</form>
